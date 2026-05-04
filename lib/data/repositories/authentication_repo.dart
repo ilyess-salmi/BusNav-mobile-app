@@ -132,11 +132,11 @@ class AuthenticationRepository extends GetxController {
   Future<UserCredential?> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser =null;
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
       // Create a new credential
-      final authCredential = GoogleAuthProvider.credential(accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+      final authCredential = GoogleAuthProvider.credential(accessToken: googleAuth?.idToken, idToken: googleAuth?.idToken);
       final credential = await FirebaseAuth.instance.signInWithCredential(authCredential);
       return credential;
     } on FirebaseAuthException catch (e) {

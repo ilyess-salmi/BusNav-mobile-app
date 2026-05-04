@@ -75,14 +75,13 @@ class LoginController extends GetxController {
       if (userCredential == null) return;
       // creat userModel :
       UserModel newUser = UserModel(
-        userId: userCredential.user!.uid,
-        firstName: UserModel.nameParts(userCredential.user!.displayName!)[0],
-        lastName: UserModel.nameParts(userCredential.user!.displayName!)[1],
-        username: UserModel.nameParts(userCredential.user!.displayName!).join(""),
-        phoneNumber: userCredential.user!.phoneNumber ?? "",
-        email: userCredential.user!.email!,
-        password: password.text.trim(),
-      );
+          userId: userCredential.user!.uid,
+          firstName: UserModel.nameParts(userCredential.user!.displayName!)[0],
+          lastName: UserModel.nameParts(userCredential.user!.displayName!)[1],
+          username: UserModel.nameParts(userCredential.user!.displayName!).join(""),
+          phoneNumber: userCredential.user!.phoneNumber ?? "",
+          email: userCredential.user!.email!,
+          password: password.text.trim());
       // add user to fireStore :
       final UserRepository userRepository = Get.put(UserRepository());
       await userRepository.saveUser(newUser);
@@ -110,9 +109,9 @@ class LoginController extends GetxController {
   // *-------------------------------------------------- UI-related functions ------------------------------*//
   // widgets :
   Widget passwordsuffixIcon() => IconButton(
-    icon: Icon(hidePassword.value ? Iconsax.eye_slash : Iconsax.eye),
-    onPressed: () {
-      hidePassword.value = !hidePassword.value;
-    },
-  );
+        icon: Icon(hidePassword.value ? Iconsax.eye_slash : Iconsax.eye),
+        onPressed: () {
+          hidePassword.value = !hidePassword.value;
+        },
+      );
 }

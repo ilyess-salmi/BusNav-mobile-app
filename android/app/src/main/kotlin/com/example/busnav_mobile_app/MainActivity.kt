@@ -1,4 +1,4 @@
-package com.example.busnav_mobile_app
+package com.example.busnav
 
 import io.flutter.embedding.android.FlutterActivity
 

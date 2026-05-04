@@ -8,18 +8,18 @@ class OnboardingController extends GetxController {
   RxInt currentPageIndex = 0.obs;
   RxBool done = false.obs;
 
-  updatePageIndecator(index) {
+  void updatePageIndecator(index) {
     currentPageIndex.value = index;
     currentPageIndex.value == 2 ? done.value = true : done.value = false;
   }
 
-  dotNavigationClick(index) {
+  void dotNavigationClick(index) {
     currentPageIndex.value = index;
     pageController.animateToPage(currentPageIndex.value, duration: const Duration(milliseconds: 500), curve: Curves.ease);
     // currentPageIndex.value == 2 ? done.value = true : done.value = false;
   }
 
-  nextPage() async {
+  Future<void> nextPage() async {
     currentPageIndex.value != 2
         ? currentPageIndex.value++
         : {Get.offAllNamed(RoutesNames.login_screen), await GetStorage().write("firstTime", false), Get.delete<OnboardingController>()};
@@ -27,7 +27,7 @@ class OnboardingController extends GetxController {
     currentPageIndex.value == 2 ? done.value = true : done.value = false;
   }
 
-  skipPages() {
+  void skipPages() {
     currentPageIndex.value = 2;
     pageController.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }

@@ -8,7 +8,7 @@ class NetworkController extends GetxController {
   static NetworkController get instance => Get.find();
 
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   final Rx<ConnectivityResult> _connectivityStatus = ConnectivityResult.none.obs;
 
   @override
@@ -23,7 +23,8 @@ class NetworkController extends GetxController {
     _updateConnectionStatus(initialStatus);
   }
 
-  void _updateConnectionStatus(ConnectivityResult connectivityResult) async {
+  void _updateConnectionStatus(List<ConnectivityResult> connectivityResults) async {
+    final connectivityResult = connectivityResults.last;
     _connectivityStatus.value = connectivityResult;
     if (_connectivityStatus.value == ConnectivityResult.none) {
       print("connected :  ${_connectivityStatus.value}");
