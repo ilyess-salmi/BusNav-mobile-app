@@ -1,20 +1,33 @@
-import 'package:busnav/app.dart';
-import 'package:busnav/data/repositories/authentication_repo.dart';
-import 'package:busnav/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+
+import 'routes/app_pages.dart';
+import 'routes/app_routes.dart';
+import 'core/storage/token_storage.dart';
 
 void main() async {
-  // Todo: Add Widgets Binding
   WidgetsFlutterBinding.ensureInitialized();
-  // Todo: Init Local Storage
-  // Todo: Await Native Splash
-  // Todo: Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-    name: "auth_app_firebase",
-  ).then((value) => Get.put(AuthenticationRepository()));
-  // Todo: Initialize Authentication
-  runApp(const App());
+
+  await GetStorage.init();
+
+  runApp(const BusNavApp());
+}
+
+class BusNavApp extends StatelessWidget {
+  const BusNavApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'BusNav',
+
+      initialRoute: TokenStorage.isLoggedIn()
+          ? AppRoutes.home
+          : AppRoutes.login,
+
+      getPages: AppPages.pages,
+    );
+  }
 }
