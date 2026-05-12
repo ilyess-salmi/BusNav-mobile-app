@@ -22,11 +22,8 @@ class BusNavApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BusNav',
-
-      initialRoute: TokenStorage.isLoggedIn()
-          ? AppRoutes.home
-          : AppRoutes.login,
-
+      initialRoute:
+          TokenStorage.isLoggedIn() ? AppRoutes.home : AppRoutes.login,
       getPages: AppPages.pages,
     );
   }

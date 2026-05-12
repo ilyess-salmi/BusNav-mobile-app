@@ -4,8 +4,8 @@ import 'package:busnav/features/auth/screens/login/phone_number/phone_login_scre
 import 'package:busnav/features/auth/screens/onboarding/onboarding_screen.dart';
 import 'package:busnav/features/auth/screens/otp/otp_verification_screen.dart';
 import 'package:busnav/features/auth/screens/password_config/forget_password_screen.dart';
-import 'package:busnav/features/auth/screens/signup/singup_screen.dart';
-import 'package:busnav/features/auth/screens/signup/verify_email_screen.dart';
+import 'package:busnav/features/auth/screens/register/register_screen.dart';
+import 'package:busnav/features/auth/screens/register/verify_email_screen.dart';
 import 'package:busnav/features/auth/screens/splash_screen.dart';
 import 'package:busnav/features/auth/screens/welcome_screen.dart';
 import 'package:busnav/navigation_menu.dart';
@@ -24,7 +24,7 @@ class AppRoutes {
     ),
     GetPage(name: RoutesNames.verify_email_screen, page: () => const VerifyEmailScreen()),
     GetPage(name: RoutesNames.login_screen, page: () => PhoneLoginScreen()),
-    GetPage(name: RoutesNames.signup_screen, page: () => const SignupScreen()),
+    GetPage(name: RoutesNames.signup_screen, page: () => RegisterScreen()),
     GetPage(
       name: RoutesNames.onboarding_screen,
       page: () => const OnboardingScreen(),
@@ -32,5 +32,6 @@ class AppRoutes {
       transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(name: RoutesNames.welcome_screen, page: () => const WelcomeScreen()),
+    
   ];
 }

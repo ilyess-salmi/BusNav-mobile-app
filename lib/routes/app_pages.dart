@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
 import '../features/auth/controllers/auth_controller.dart';
-import '../features/auth/screens/login_screen.dart';
-import '../features/auth/screens/register_screen.dart';
+import '../features/auth/screens/login/login_screen.dart';
+import '../features/auth/screens/register/register_screen.dart';
 
 import '../features/home/screens/home_screen.dart';
 import '../features/bus_lines/screens/bus_lines_screen.dart';
@@ -19,49 +19,49 @@ class AppPages {
   static final pages = [
     GetPage(
       name: AppRoutes.login,
-      page: () => const LoginScreen(),
+      page: () => LoginScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
     ),
     GetPage(
       name: AppRoutes.register,
-      page: () => const RegisterScreen(),
+      page: () => RegisterScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
     ),
     GetPage(
       name: AppRoutes.home,
-      page: () => const HomeScreen(),
+      page: () => HomeScreen(),
     ),
-    GetPage(
-      name: AppRoutes.busLines,
-      page: () => const BusLinesScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.busStops,
-      page: () => const BusStopsScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.predictions,
-      page: () => const PredictionsScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.favorites,
-      page: () => const FavoritesScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.notifications,
-      page: () => const NotificationsScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.profile,
-      page: () => const ProfileScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.trips,
-      page: () => const TripsScreen(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.busLines,
+    //   page: () => const BusLinesScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.busStops,
+    //   page: () => const BusStopsScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.predictions,
+    //   page: () => const PredictionsScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.favorites,
+    //   page: () => const FavoritesScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.notifications,
+    //   page: () => const NotificationsScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.profile,
+    //   page: () => const ProfileScreen(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.trips,
+    //   page: () => const TripsScreen(),
+    // ),
   ];
 }

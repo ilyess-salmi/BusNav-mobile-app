@@ -30,11 +30,11 @@ class AuthController extends GetxController {
 
       currentUser.value = UserModel.fromJson(userData);
 
-      Get.snackbar('Success', 'Logged in successfully');
+      Get.snackbar('Success', 'Logged in successfully fi');
 
       Get.offAllNamed('/home');
     } catch (e) {
-      Get.snackbar('Login failed', e.toString());
+      Get.snackbar('Login failed fi', e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -58,7 +58,7 @@ class AuthController extends GetxController {
         roleId: roleId,
       );
 
-      Get.snackbar('Success', 'Account created successfully');
+      Get.snackbar('Success', 'Account created successfully fi');
 
       Get.offAllNamed('/login');
     } catch (e) {

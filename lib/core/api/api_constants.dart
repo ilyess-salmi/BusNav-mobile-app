@@ -1,6 +1,9 @@
 class ApiConstants {
-  static const String baseUrl = 'http://10.0.2.2:3003';
+  static const bool isEmulator = false; //for both cases
 
+  static const String baseUrl = isEmulator
+    ? 'http://10.0.2.2:3003'
+    : 'http://192.168.11.125:3003';
   // Auth
   static const String login = '/auth/login';
   static const String register = '/auth/register';

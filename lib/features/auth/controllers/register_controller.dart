@@ -2,7 +2,7 @@ import 'package:busnav/common/popups/loader.dart';
 import 'package:busnav/common/popups/snack_bar.dart';
 import 'package:busnav/data/repositories/authentication_repo.dart';
 import 'package:busnav/data/repositories/user_repo.dart';
-import 'package:busnav/features/auth/screens/signup/verify_email_screen.dart';
+import 'package:busnav/features/auth/screens/register/verify_email_screen.dart';
 import 'package:busnav/features/personalization/models/user_model.dart';
 import 'package:busnav/services/network_controller.dart';
 import 'package:busnav/utils/formatters/formatter.dart';
@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class SignupController extends GetxController {
-  static SignupController get instance => Get.find();
+class RegisterController extends GetxController {
+  static RegisterController get instance => Get.find();
   // variables :
   final firstName = TextEditingController();
   final lastName = TextEditingController();
@@ -29,7 +29,7 @@ class SignupController extends GetxController {
   Rx<bool> hideConfirmPassword = false.obs;
 
   // functions :
-  Future signup() async {
+  Future register() async {
     try {
       //start loading
       Loader.loader();
