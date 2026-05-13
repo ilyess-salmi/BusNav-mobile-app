@@ -22,19 +22,26 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      final token = data['access_token'];
-      final userData = data['user'];
+      print('LOGIN DATA: $data');
 
-      await TokenStorage.saveToken(token);
-      await TokenStorage.saveUserRole(userData['role']);
+      final token = data['access_token'];
+      final userData = data['user'] ?? data;
+
+      if (token != null) {
+        await TokenStorage.saveToken(token);
+      }
+
+      if (userData['role'] != null) {
+        await TokenStorage.saveUserRole(userData['role'].toString());
+      }
 
       currentUser.value = UserModel.fromJson(userData);
 
-      Get.snackbar('Success', 'Logged in successfully fi');
+      Get.snackbar('Success', 'Logged in successfully');
 
       Get.offAllNamed('/home');
     } catch (e) {
-      Get.snackbar('Login failed fi', e.toString());
+      Get.snackbar('Login failed', e.toString());
     } finally {
       isLoading.value = false;
     }

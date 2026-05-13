@@ -1,9 +1,15 @@
+import 'package:flutter/foundation.dart';
+
 class ApiConstants {
   static const bool isEmulator = false; //for both cases
 
-  static const String baseUrl = isEmulator
-    ? 'http://10.0.2.2:3003'
-    : 'http://192.168.11.125:3003';
+  static String get baseUrl {
+    if (kIsWeb) {
+      return 'http://localhost:3003';
+    }
+
+    return isEmulator ? 'http://10.0.2.2:3003' : 'http://192.168.11.125:3003';
+  }
   // Auth
   static const String login = '/auth/login';
   static const String register = '/auth/register';
