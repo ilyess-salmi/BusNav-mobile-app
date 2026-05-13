@@ -9,6 +9,7 @@ class AuthController extends GetxController {
 
   final isLoading = false.obs;
   final Rxn<UserModel> currentUser = Rxn<UserModel>();
+  RxBool isGuest = false.obs;
 
   Future<void> login({
     required String email,
@@ -72,6 +73,16 @@ class AuthController extends GetxController {
       Get.snackbar('Register failed', e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> loginGuest() async {
+    try {
+      isGuest.value = true;
+      await TokenStorage.saveGuestMode(true);
+      Get.offAllNamed('/home');
+    } catch (e) {
+      Get.snackbar('Guest Login failed', e.toString());
     }
   }
 

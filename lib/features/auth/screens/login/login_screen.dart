@@ -152,7 +152,7 @@ class LoginScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 45,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => controller.loginGuest(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey.shade300,
                       shape: RoundedRectangleBorder(

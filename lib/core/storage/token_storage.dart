@@ -5,6 +5,7 @@ class TokenStorage {
 
   static const String _tokenKey = 'access_token';
   static const String _userRoleKey = 'user_role';
+  static final _storage = GetStorage();
 
   static Future<void> saveToken(String token) async {
     await _box.write(_tokenKey, token);
@@ -30,5 +31,13 @@ class TokenStorage {
   static bool isLoggedIn() {
     final token = getToken();
     return token != null && token.isNotEmpty;
+  }
+
+  static Future<void> saveGuestMode(bool value) async {
+    await _storage.write('isGuest', value);
+  }
+
+  static bool isGuest() {
+    return _storage.read('isGuest') ?? false;
   }
 }
