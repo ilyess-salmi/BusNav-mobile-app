@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../routes/app_routes.dart';
 import 'home_nav_item.dart';
 
 class HomeBottomNav extends StatelessWidget {
   const HomeBottomNav({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +22,31 @@ class HomeBottomNav extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           HomeNavItem(
             icon: Icons.home_outlined,
             label: 'Home',
+            onTap: () {
+              debugPrint('Home clicked');
+              Get.toNamed(AppRoutes.home);
+            },
             active: true,
           ),
           HomeNavItem(
             icon: Icons.directions_bus_outlined,
             label: 'Bus Lines',
+            onTap: () {
+              debugPrint('Bus Lines clicked');
+              Get.toNamed(AppRoutes.busLines);
+            },
           ),
-          HomeNavItem(
+          const HomeNavItem(
             icon: Icons.favorite_border,
             label: 'Favorites',
           ),
-          HomeNavItem(
+          const HomeNavItem(
             icon: Icons.notifications_none,
             label: 'Notifications',
           ),

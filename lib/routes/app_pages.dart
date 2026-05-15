@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../features/auth/controllers/auth_controller.dart';
 import '../features/auth/screens/login/login_screen.dart';
 import '../features/auth/screens/register/register_screen.dart';
+import '../features/bus_lines/bindings/bus_lines_binding.dart';
 
 import '../features/home/screens/home_screen.dart';
 import '../features/bus_lines/screens/bus_lines_screen.dart';
@@ -35,10 +36,11 @@ class AppPages {
       name: AppRoutes.home,
       page: () => HomeScreen(),
     ),
-    // GetPage(
-    //   name: AppRoutes.busLines,
-    //   page: () => const BusLinesScreen(),
-    // ),
+    GetPage(
+      name: AppRoutes.busLines,
+      page: () => const BusLinesScreen(),
+      binding: BusLinesBinding(),
+    ),
     // GetPage(
     //   name: AppRoutes.busStops,
     //   page: () => const BusStopsScreen(),

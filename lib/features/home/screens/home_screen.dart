@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import '../../bus_lines/controllers/selected_bus_line_controller.dart';
+
 
 import '../widgets/home_bottom_nav.dart';
 import '../widgets/home_header.dart';
 import '../widgets/home_map.dart';
 import '../widgets/home_search_bar.dart';
 import '../widgets/nearby_bus_sheet.dart';
+import '../../bus_locations/controllers/bus_locations_controller.dart';
+import '../../bus_lines/controllers/get_line_points_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +27,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   late final AnimationController _navAnimController;
   late final Animation<Offset> _navSlideAnim;
+  final SelectedBusLineController selectedBusLineController =
+      Get.put(SelectedBusLineController());
+  final BusLocationsController busLocationsController =
+      Get.put(BusLocationsController());
+  final GetLinePointsController linePointsController =
+      Get.put(GetLinePointsController());
 
   @override
   void initState() {
@@ -71,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: Stack(
         children: [
-          const HomeMap(),
+          HomeMap(),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),

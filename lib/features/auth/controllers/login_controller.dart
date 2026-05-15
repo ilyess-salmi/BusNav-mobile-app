@@ -15,8 +15,8 @@ class LoginController extends GetxController {
   static final LoginController instance = Get.find();
   // variables :
   final localStorage = GetStorage();
-  final email = TextEditingController();
-  final password = TextEditingController();
+  final email = TextEditingController(text: "ahmedabassi@gmail.com");
+  final password = TextEditingController(text: "ilyas1029");
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   // states
   Rx<bool> hidePassword = true.obs;
@@ -49,7 +49,9 @@ class LoginController extends GetxController {
       // remove dots from email to avoid multiple accounts creation by one email
       final formattedEmail = MyFormatter.formatEmail(email.value.text);
 
-      final UserCredential? userCredential = await AuthenticationRepository.inctence.signInWithEmailAndPassword(formattedEmail, password.text.trim());
+      final UserCredential? userCredential = await AuthenticationRepository
+          .inctence
+          .signInWithEmailAndPassword(formattedEmail, password.text.trim());
       if (userCredential == null) return;
 
       // save email local storage :
@@ -71,14 +73,16 @@ class LoginController extends GetxController {
       //check internet connectivity
       final connected = await NetworkController.instance.isConected();
       if (!connected) return;
-      final UserCredential? userCredential = await AuthenticationRepository.inctence.signInWithGoogle();
+      final UserCredential? userCredential =
+          await AuthenticationRepository.inctence.signInWithGoogle();
       if (userCredential == null) return;
       // creat userModel :
       UserModel newUser = UserModel(
           userId: userCredential.user!.uid,
           firstName: UserModel.nameParts(userCredential.user!.displayName!)[0],
           lastName: UserModel.nameParts(userCredential.user!.displayName!)[1],
-          username: UserModel.nameParts(userCredential.user!.displayName!).join(""),
+          username:
+              UserModel.nameParts(userCredential.user!.displayName!).join(""),
           phoneNumber: userCredential.user!.phoneNumber ?? "",
           email: userCredential.user!.email!,
           password: password.text.trim());
