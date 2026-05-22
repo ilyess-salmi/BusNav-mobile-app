@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import '../../bus_lines/controllers/selected_bus_line_controller.dart';
 
 
@@ -84,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: Stack(
         children: [
-          HomeMap(),
+          const HomeMap(),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
