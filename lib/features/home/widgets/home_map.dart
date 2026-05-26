@@ -28,7 +28,7 @@ class _HomeMapState extends State<HomeMap> {
   Widget build(BuildContext context) {
     return Obx(() {
       // bus markers
-      final markers = _busLocCtrl.busLocations.map((location) {
+      final markers = _busLocCtrl.busLocations.values.map((location) {
         return Marker(
           markerId: MarkerId('bus_${location.locationId}'),
           position: LatLng(location.latitude, location.longitude),

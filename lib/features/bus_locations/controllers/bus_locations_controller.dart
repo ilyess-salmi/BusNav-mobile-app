@@ -1,27 +1,97 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import '../models/bus_location_model.dart';
-import '../repositories/bus_locations_repository.dart';
 
 class BusLocationsController extends GetxController {
-  final BusLocationsRepository _repository = BusLocationsRepository();
+  // Map of busId → latest location so each bus has exactly one marker
+  final busLocations = <int, BusLocationModel>{}.obs;
 
-  final isLoading = false.obs;
-  final busLocations = <BusLocationModel>[].obs;
+  StreamSubscription? _subscription;
+  http.Client? _client;
+
+  // Android emulator  → 10.0.2.2
+  // iOS simulator     → localhost
+  // Physical device   → your machine's local IP e.g. 192.168.1.x
+  static const String _baseUrl = 'http://10.0.2.2:3000';
 
   @override
   void onInit() {
     super.onInit();
-    fetchBusLocations();
+    _connectSSE();
   }
 
-  Future<void> fetchBusLocations() async {
+  Future<void> _connectSSE() async {
+    _client = http.Client();
+
+    final request = http.Request(
+      'GET',
+      Uri.parse('$_baseUrl/bus-locations/stream'),
+    );
+
+    // If your backend requires auth, add the token here
+    // request.headers['Authorization'] = 'Bearer ${TokenStorage.getToken()}';
+
     try {
-      isLoading.value = true;
-      busLocations.value = await _repository.getBusLocations();
+      final response = await _client!.send(request);
+
+      if (response.statusCode != 200) {
+        print('SSE connection failed: ${response.statusCode}');
+        _scheduleReconnect();
+        return;
+      }
+
+      print('SSE connected');
+
+      _subscription = response.stream
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen(
+            _onSseData,
+            onError: (e) {
+              print('SSE error: $e');
+              _scheduleReconnect();
+            },
+            onDone: () {
+              print('SSE stream closed');
+              _scheduleReconnect();
+            },
+          );
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load bus locations');
-    } finally {
-      isLoading.value = false;
+      print('SSE connect exception: $e');
+      _scheduleReconnect();
     }
+  }
+
+  void _onSseData(String line) {
+    // SSE lines look like:  data: {"bus_id":1,...}
+    if (!line.startsWith('data:')) return;
+
+    final jsonStr = line.substring(5).trim();
+    if (jsonStr.isEmpty) return;
+
+    try {
+      final map = jsonDecode(jsonStr) as Map<String, dynamic>;
+      final location = BusLocationModel.fromJson(map);
+      busLocations[location.busId] = location; // map auto-notifies Obx
+      print('Bus ${location.busId} → ${location.latitude}, ${location.longitude}');
+    } catch (e) {
+      print('SSE parse error: $e');
+    }
+  }
+
+  void _scheduleReconnect() {
+    _subscription?.cancel();
+    _client?.close();
+    // Wait 3 seconds before reconnecting
+    Future.delayed(const Duration(seconds: 3), _connectSSE);
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    _client?.close();
+    super.onClose();
   }
 }
