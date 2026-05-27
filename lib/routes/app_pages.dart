@@ -4,15 +4,16 @@ import '../features/auth/controllers/auth_controller.dart';
 import '../features/auth/screens/login/login_screen.dart';
 import '../features/auth/screens/register/register_screen.dart';
 import '../features/bus_lines/bindings/bus_lines_binding.dart';
+import '../features/driver/bindings/driver_home_binding.dart';
+import '../features/driver/bindings/driver_profile_binding.dart';
+import '../features/driver/bindings/driver_trip_binding.dart';
+import '../features/driver/screens/driver_home_screen.dart';
+import '../features/driver/screens/driver_profile_screen.dart';
+import '../features/driver/screens/driver_trip_screen.dart';
 
 import '../features/home/screens/home_screen.dart';
 import '../features/bus_lines/screens/bus_lines_screen.dart';
-import '../features/bus_stops/screens/bus_stops_screen.dart';
-import '../features/predictions/screens/predictions_screen.dart';
-import '../features/favorites/screens/favorites_screen.dart';
-import '../features/notifications/screens/notifications_screen.dart';
-import '../features/profile/screens/profile_screen.dart';
-import '../features/trips/screens/trips_screen.dart';
+
 
 import 'app_routes.dart';
 
@@ -41,6 +42,26 @@ class AppPages {
       page: () => const BusLinesScreen(),
       binding: BusLinesBinding(),
     ),
+    // app_pages.dart
+    GetPage(
+      name: AppRoutes.driverHome,
+      page: () => DriverHomeScreen(),
+      binding: DriverHomeBinding(),
+      ),
+    GetPage(
+      name: AppRoutes.driverTrip,
+      page: () => DriverTripScreen(),
+      binding: DriverTripBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.driverProfile,
+      page: () => DriverProfileScreen(),
+      binding: DriverProfileBinding(),
+    ),
+    // GetPage(
+    //   name: AppRoutes.driverReport,
+    //   page: () => DriverReportProblemScreen(),
+    // ),
     // GetPage(
     //   name: AppRoutes.busStops,
     //   page: () => const BusStopsScreen(),

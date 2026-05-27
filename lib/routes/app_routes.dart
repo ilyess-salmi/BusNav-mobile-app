@@ -11,4 +11,10 @@ class AppRoutes {
   static const String profile = '/profile';
 
   static const String trips = '/trips';
+
+  //driver
+  static const String driverHome    = '/driver/home';
+  static const String driverTrip    = '/driver/trip';
+  static const String driverProfile = '/driver/profile';
+  static const String driverReport  = '/driver/report';
 }
