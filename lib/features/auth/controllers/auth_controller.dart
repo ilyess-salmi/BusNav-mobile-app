@@ -40,7 +40,7 @@ class AuthController extends GetxController {
 
       Get.snackbar('Success', 'Logged in successfully');
 
-      Get.offAllNamed('/driver/home');
+      _redirectAfterLogin();
     } catch (e) {
       Get.snackbar('Login failed', e.toString());
     } finally {
@@ -80,7 +80,7 @@ class AuthController extends GetxController {
     try {
       isGuest.value = true;
       await TokenStorage.saveGuestMode(true);
-      Get.offAllNamed('/driver/home');
+      Get.offAllNamed('/home');
     } catch (e) {
       Get.snackbar('Guest Login failed', e.toString());
     }
@@ -99,5 +99,14 @@ class AuthController extends GetxController {
     await TokenStorage.clear();
     currentUser.value = null;
     Get.offAllNamed('/login');
+  }
+
+  void _redirectAfterLogin() {
+    final role = currentUser.value?.role.toLowerCase();
+    if (role == 'driver') {
+      Get.offAllNamed('/driver/home');
+    } else {
+      Get.offAllNamed('/home');
+    }
   }
 }
