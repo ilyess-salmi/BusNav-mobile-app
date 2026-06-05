@@ -3,12 +3,14 @@ class UserModel {
   final String userName;
   final String userEmail;
   final String role;
+  final int? driverId;
 
   UserModel({
     required this.userId,
     required this.userName,
     required this.userEmail,
     required this.role,
+    required this.driverId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class UserModel {
     role: json['role'] is Map             // handle both cases
         ? json['role']['role_name'] ?? ''
         : json['role']?.toString() ?? '',
+    driverId: json['driver_id'],
   );
 }
 }

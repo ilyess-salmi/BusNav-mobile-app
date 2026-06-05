@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../models/driver_trip_model.dart';
 import '../repositories/driver_trip_repository.dart';
 import 'driver_location_controller.dart';
+import '../../auth/controllers/auth_controller.dart';
 
 class DriverTripController extends GetxController {
   final DriverTripRepository _repository = DriverTripRepository();
@@ -9,11 +10,10 @@ class DriverTripController extends GetxController {
 
   final isLoading = false.obs;
   final trips = <DriverTripModel>[].obs;
+  final AuthController _authController = Get.find();
   final Rxn<DriverTripModel> activeTrip = Rxn<DriverTripModel>();
 
-  // Replace with real driverId from AuthController
-  int get driverId => 1;
-
+  int get driverId => _authController.currentUser.value?.userId ?? 0;
   @override
   void onInit() {
     super.onInit();
