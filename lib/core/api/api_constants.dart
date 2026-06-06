@@ -8,7 +8,7 @@ class ApiConstants {
       return 'http://localhost:3003';
     }
 
-    return isEmulator ? 'http://10.0.2.2:3003' : 'http://192.168.11.148:3003';
+    return isEmulator ? 'http://10.0.2.2:3003' : 'http://192.168.1.100:3003';
   }
   // Auth
   static const String login = '/auth/login';

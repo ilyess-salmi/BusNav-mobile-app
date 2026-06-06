@@ -18,12 +18,20 @@ class DriverTripModel {
   factory DriverTripModel.fromJson(Map<String, dynamic> json) {
     return DriverTripModel(
       tripId: json['trip_id'],
-      busId: json['bus_id'],
-      driverId: json['driver_id'],
+      busId: json['bus']?['bus_id'] ?? json['bus_id'],         // handle nested object
+      driverId: json['driver']?['driver_id'] ?? json['driver_id'], //handle nested object
       tripStatus: json['trip_status'] ?? 'started',
       startTime: DateTime.parse(json['start_time']),
-      endTime:
-          json['end_time'] != null ? DateTime.parse(json['end_time']) : null,
+      endTime: json['end_time'] != null ? DateTime.parse(json['end_time']) : null,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'trip_id': tripId,
+    'bus_id': busId,
+    'driver_id': driverId,
+    'trip_status': tripStatus,
+    'start_time': startTime.toIso8601String(),
+    'end_time': endTime?.toIso8601String(),
+  };
 }

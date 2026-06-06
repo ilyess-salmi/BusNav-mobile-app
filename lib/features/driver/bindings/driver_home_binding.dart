@@ -6,8 +6,8 @@ import '../controllers/driver_trip_controller.dart';
 class DriverHomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => DriverLocationController());
-    Get.lazyPut(() => DriverHomeController());
-    Get.lazyPut(() => DriverTripController());
+    Get.put(DriverLocationController());
+    Get.put(DriverTripController());
+    Get.put(DriverHomeController());
   }
 }

@@ -13,22 +13,26 @@ class DriverTripController extends GetxController {
   final AuthController _authController = Get.find();
   final Rxn<DriverTripModel> activeTrip = Rxn<DriverTripModel>();
 
-  int get driverId => _authController.currentUser.value?.userId ?? 0;
+  int get driverId => _authController.currentUser.value?.driverId ?? 0;
   @override
-  void onInit() {
-    super.onInit();
-    fetchTrips();
-  }
+  void onInit() {}
 
   Future<void> fetchTrips() async {
     try {
       isLoading.value = true;
+      print("=================================================================");
+      print('driverId: $driverId');
+      print('currentUser: ${_authController.currentUser.value?.toJson()}');
+      print('fetching trips for driverId: $driverId');
+      print('driverid from model: ${_authController.currentUser.value?.driverId}');
+      print("=================================================================");
+
       trips.value = await _repository.getDriverTrips(driverId);
-      // Set the first started/in_progress trip as active
       activeTrip.value = trips.firstWhereOrNull(
         (t) => t.tripStatus == 'started' || t.tripStatus == 'in_progress',
       );
     } catch (e) {
+      print('fetchTrips error: $e');
       Get.snackbar('Error', 'Failed to load trips');
     } finally {
       isLoading.value = false;

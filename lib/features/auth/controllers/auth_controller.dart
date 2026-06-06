@@ -106,7 +106,7 @@ class AuthController extends GetxController {
     if (role == 'driver') {
       Get.offAllNamed('/driver/home');
     } else {
-      Get.offAllNamed('/home');
+      Get.offAllNamed('/driver/home');
     }
   }
 }

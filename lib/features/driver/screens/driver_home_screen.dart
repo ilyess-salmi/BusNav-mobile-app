@@ -16,6 +16,11 @@ class DriverHomeScreen extends StatelessWidget {
     final tripController = Get.find<DriverTripController>();
     final locationController = Get.find<DriverLocationController>();
 
+    // fetch once the screen is rendered and auth is ready
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      tripController.fetchTrips();
+    });
+
     return Scaffold(
       bottomNavigationBar: const DriverBottomNav(activePage: 'home'),
       body: Stack(
