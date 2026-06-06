@@ -1,4 +1,7 @@
+import 'package:busnav/features/driver/screens/driver_trip_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import '../models/driver_trip_model.dart';
 
 class TripStatusCard extends StatelessWidget {
@@ -34,94 +37,98 @@ class TripStatusCard extends StatelessWidget {
         return 'Not Started';
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.07),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () => Get.to(
+        () => DriverTripDetailScreen(trip: trip),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Trip #${trip.tripId}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _statusColor.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  _statusLabel,
-                  style: TextStyle(
-                    color: _statusColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.07),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Trip #${trip.tripId}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              const Icon(Icons.directions_bus, size: 16, color: Colors.black45),
-              const SizedBox(width: 6),
-              Text('Bus #${trip.busId}',
-                  style: const TextStyle(color: Colors.black54, fontSize: 13)),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              if (trip.tripStatus == 'started' && onStart != null)
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: onStart,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFB247FF),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _statusColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _statusLabel,
+                    style: TextStyle(
+                      color: _statusColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
                     ),
-                    child: const Text('Start Trip',
-                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
-              if (trip.tripStatus == 'in_progress' && onEnd != null)
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: onEnd,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFEF4444),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(Icons.directions_bus, size: 16, color: Colors.black45),
+                const SizedBox(width: 6),
+                Text('Bus #${trip.busId}',
+                    style: const TextStyle(color: Colors.black54, fontSize: 13)),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                if (trip.tripStatus == 'started' && onStart != null)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: onStart,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFB247FF),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text('Start Trip',
+                          style: TextStyle(color: Colors.white)),
                     ),
-                    child: const Text('End Trip',
-                        style: TextStyle(color: Colors.white)),
                   ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
+                if (trip.tripStatus == 'in_progress' && onEnd != null)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: onEnd,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFEF4444),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text('End Trip',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),   // closes Column
+      ),     // closes Container
+    );       // closes GestureDetector
   }
 }

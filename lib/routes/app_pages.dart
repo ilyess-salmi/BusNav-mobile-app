@@ -1,3 +1,5 @@
+import 'package:busnav/features/driver/models/driver_trip_model.dart';
+import 'package:busnav/features/driver/screens/driver_trip_detail_screen.dart';
 import 'package:get/get.dart';
 
 import '../features/auth/controllers/auth_controller.dart';
@@ -57,6 +59,12 @@ class AppPages {
       name: AppRoutes.driverProfile,
       page: () => DriverProfileScreen(),
       binding: DriverProfileBinding(),
+    ),
+    GetPage(
+      name: '/driver/trip-detail',
+      page: () => DriverTripDetailScreen(
+        trip: Get.arguments as DriverTripModel,
+      ),
     ),
     // GetPage(
     //   name: AppRoutes.driverReport,

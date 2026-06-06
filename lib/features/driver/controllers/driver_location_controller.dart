@@ -13,6 +13,13 @@ class DriverLocationController extends GetxController {
 
   Timer? _timer;
   int? activeBusId;
+  Future<void> requestPermission() async {
+    final permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      Get.snackbar('Permission denied', 'Location access is required for tracking');
+    }
+  }
 
   void startTracking(int busId) async {
     activeBusId = busId;
