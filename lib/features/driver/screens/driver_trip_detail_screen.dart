@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../controllers/driver_trip_controller.dart';
 import '../controllers/driver_location_controller.dart';
 import '../models/driver_trip_model.dart';
-import '../repositories/driver_trip_repository.dart';
+import '../widgets/driver_map.dart';
 import '../../bus_lines/repositories/bus_line_repository.dart';
 
 class DriverTripDetailScreen extends StatefulWidget {
@@ -17,52 +16,38 @@ class DriverTripDetailScreen extends StatefulWidget {
 }
 
 class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
-  final Completer<GoogleMapController> _mapController = Completer();
   final DriverTripController _tripController = Get.find();
   final DriverLocationController _locationController = Get.find();
   final BusLinesRepository _busLineRepo = BusLinesRepository();
 
-  Set<Polyline> _polylines = {};
+  final _routePoints = <LatLng>[].obs;
   bool _loadingRoute = true;
+  late final RxString _tripStatus;
 
   @override
   void initState() {
     super.initState();
+    _tripStatus = widget.trip.tripStatus.obs;
     _loadRoute();
-    _requestLocationPermission();
-  }
+    _locationController.requestPermission();
 
-  Future<void> _requestLocationPermission() async {
-    await _locationController.requestPermission();
+    if (widget.trip.tripStatus == 'in_progress') {
+      _locationController.startTracking(widget.trip.busId);
+    }
   }
 
   Future<void> _loadRoute() async {
     try {
       final points = await _busLineRepo.getLinePoints(widget.trip.busLineId);
-      final latLngs = points
-          .map((p) => LatLng(p.latitude, p.longitude))
-          .toList();
-
-      setState(() {
-        _polylines = {
-          Polyline(
-            polylineId: const PolylineId('trip_route'),
-            points: latLngs,
-            color: const Color(0xFF2563EB),
-            width: 5,
-          ),
-        };
-        _loadingRoute = false;
-      });
-    } catch (e) {
-      setState(() => _loadingRoute = false);
-    }
+      _routePoints.value =
+          points.map((p) => LatLng(p.latitude, p.longitude)).toList();
+    } catch (_) {}
+    setState(() => _loadingRoute = false);
   }
 
   @override
   Widget build(BuildContext context) {
     final trip = widget.trip;
-    const LatLng defaultCenter = LatLng(33.894, -5.555);
 
     return Scaffold(
       appBar: AppBar(
@@ -71,9 +56,7 @@ class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
         title: Text(
           'Trip #${trip.tripId}',
           style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-          ),
+              color: Colors.black87, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
@@ -82,32 +65,19 @@ class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
       ),
       body: Column(
         children: [
-          // Map with route
+          // ── Map ──────────────────────────────────────────────────
           Expanded(
             child: _loadingRoute
                 ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xFFB247FF),
-                    ),
+                    child: CircularProgressIndicator(color: Color(0xFFB247FF)),
                   )
-                : GoogleMap(
-                    initialCameraPosition: const CameraPosition(
-                      target: defaultCenter,
-                      zoom: 13,
-                    ),
-                    onMapCreated: (controller) {
-                      if (!_mapController.isCompleted) {
-                        _mapController.complete(controller);
-                      }
-                    },
-                    polylines: _polylines,
-                    zoomControlsEnabled: false,
-                    mapToolbarEnabled: false,
-                    compassEnabled: false,
-                  ),
+                : Obx(() => DriverMap(
+                      routePoints:
+                          _routePoints.isEmpty ? null : _routePoints.toList(),
+                    )),
           ),
 
-          // Trip info + action button
+          // ── Trip info + action button ─────────────────────────────
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
@@ -115,10 +85,9 @@ class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, -4),
-                ),
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, -4)),
               ],
             ),
             child: Column(
@@ -130,11 +99,9 @@ class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
                     Text(
                       'Trip #${trip.tripId}',
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                          fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    _StatusBadge(status: trip.tripStatus),
+                    Obx(() => _StatusBadge(status: _tripStatus.value)),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -143,49 +110,49 @@ class _DriverTripDetailScreenState extends State<DriverTripDetailScreen> {
                     const Icon(Icons.directions_bus,
                         size: 16, color: Colors.black45),
                     const SizedBox(width: 6),
-                    Text(
-                      'Bus #${trip.busId}',
-                      style: const TextStyle(
-                          color: Colors.black54, fontSize: 13),
-                    ),
+                    Text('Bus #${trip.busId}',
+                        style: const TextStyle(
+                            color: Colors.black54, fontSize: 13)),
                   ],
                 ),
                 const SizedBox(height: 16),
                 Obx(() {
-                  final isTracking = _locationController.isTracking.value;
-                  if (trip.tripStatus == 'finished') {
-                    return const SizedBox.shrink();
-                  }
+                  final status = _tripStatus.value;
+                  if (status == 'finished') return const SizedBox.shrink();
+                  final isInProgress = status == 'in_progress';
                   return SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () async {
-                        if (trip.tripStatus == 'started') {
+                        if (status == 'started') {
                           await _tripController.startTrip(trip);
-                          Get.back();
-                        } else if (trip.tripStatus == 'in_progress') {
+                          _tripStatus.value = 'in_progress';
+                        } else if (isInProgress) {
                           await _tripController.endTrip(trip);
+                          _tripStatus.value = 'finished';
                           Get.back();
                         }
                       },
+                      icon: Icon(
+                        isInProgress
+                            ? Icons.stop_circle_outlined
+                            : Icons.play_circle_outline,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        isInProgress ? 'End Trip' : 'Start Trip',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: trip.tripStatus == 'in_progress'
+                        backgroundColor: isInProgress
                             ? const Color(0xFFEF4444)
                             : const Color(0xFFB247FF),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: Text(
-                        trip.tripStatus == 'in_progress'
-                            ? 'End Trip'
-                            : 'Start Trip',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                            borderRadius: BorderRadius.circular(14)),
                       ),
                     ),
                   );
@@ -205,17 +172,23 @@ class _StatusBadge extends StatelessWidget {
 
   Color get color {
     switch (status) {
-      case 'in_progress': return const Color(0xFF22C55E);
-      case 'finished': return Colors.grey;
-      default: return const Color(0xFFB247FF);
+      case 'in_progress':
+        return const Color(0xFF22C55E);
+      case 'finished':
+        return Colors.grey;
+      default:
+        return const Color(0xFFB247FF);
     }
   }
 
   String get label {
     switch (status) {
-      case 'in_progress': return 'In Progress';
-      case 'finished': return 'Finished';
-      default: return 'Not Started';
+      case 'in_progress':
+        return 'In Progress';
+      case 'finished':
+        return 'Finished';
+      default:
+        return 'Not Started';
     }
   }
 
@@ -227,14 +200,9 @@ class _StatusBadge extends StatelessWidget {
         color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
-      ),
+      child: Text(label,
+          style: TextStyle(
+              color: color, fontWeight: FontWeight.w600, fontSize: 12)),
     );
   }
 }

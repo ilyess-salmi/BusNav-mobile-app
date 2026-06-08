@@ -22,8 +22,9 @@ class DriverTripModel {
       tripId: json['trip_id'],
       busId: json['bus']?['bus_id'] ?? json['bus_id'],         // handle nested object
       driverId: json['driver']?['driver_id'] ?? json['driver_id'], //handle nested object
-      busLineId: json['bus']?['busLine']?['bus_line_id'] ?? 0,
-      tripStatus: json['trip_status'] ?? 'started',
+      busLineId: json['bus']?['busLine']?['bus_line_id'] 
+              ?? json['bus']?['bus_line']?['bus_line_id'] 
+              ?? 0,      tripStatus: json['trip_status'] ?? 'started',
       startTime: DateTime.parse(json['start_time']),
       endTime: json['end_time'] != null ? DateTime.parse(json['end_time']) : null,
     );

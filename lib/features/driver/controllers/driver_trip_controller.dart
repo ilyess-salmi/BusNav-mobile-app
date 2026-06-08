@@ -25,6 +25,7 @@ class DriverTripController extends GetxController {
       print('currentUser: ${_authController.currentUser.value?.toJson()}');
       print('fetching trips for driverId: $driverId');
       print('driverid from model: ${_authController.currentUser.value?.driverId}');
+      // print('Fetching route for busLineId: ${trip.busLineId}'); 
       print("=================================================================");
 
       trips.value = await _repository.getDriverTrips(driverId);

@@ -7,6 +7,7 @@ class DriverTripRepository {
   Future<List<DriverTripModel>> getDriverTrips(int driverId) async {
     final response = await _apiClient.get('/trips?driver_id=$driverId');
     final List data = response.data as List;
+    print(response.data);
     return data.map((e) => DriverTripModel.fromJson(e)).toList();
   }
 
