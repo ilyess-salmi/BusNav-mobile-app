@@ -27,8 +27,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE9DCF2),
-      body: Center(
-        child: Padding(
+      // Keeps layout stable when keyboard appears — content scrolls up instead of overflowing
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -40,9 +42,7 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.black.withOpacity(0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
-                )
-
-                
+                ),
               ],
             ),
             child: Column(

@@ -1,5 +1,5 @@
 import 'package:busnav/common/popups/snack_bar.dart';
-import 'package:busnav/features/auth/screens/signup/verify_email_screen.dart';
+import 'package:busnav/features/auth/screens/register/verify_email_screen.dart';
 import 'package:busnav/routes/routes_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';

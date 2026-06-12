@@ -13,6 +13,10 @@ class AuthController extends GetxController {
 
   Future<void> login({
     required String email,
+
+
+
+    
     required String password,
   }) async {
     try {

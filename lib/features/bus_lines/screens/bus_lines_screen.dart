@@ -5,7 +5,6 @@ import '../widgets/bus_line_card.dart';
 import '../../home/widgets/home_bottom_nav.dart';
 import '../../home/widgets/home_header.dart';
 
-
 class BusLinesScreen extends StatelessWidget {
   const BusLinesScreen({super.key});
 
@@ -78,8 +77,7 @@ class BusLinesScreen extends StatelessWidget {
           ),
         ),
       ),
-
-      bottomNavigationBar: const HomeBottomNav(),
+      bottomNavigationBar: const HomeBottomNav(activeIndex: 1),
     );
   }
 }

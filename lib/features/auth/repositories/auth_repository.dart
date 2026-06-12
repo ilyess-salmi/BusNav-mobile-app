@@ -24,7 +24,7 @@ class AuthRepository {
     required String email,
     required String password,
     required String phone,
-    required int roleId,
+    required int roleId,P
   }) async {
     final response = await _apiClient.post(
       ApiConstants.register,
