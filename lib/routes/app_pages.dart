@@ -16,6 +16,8 @@ import '../features/driver/screens/driver_trip_screen.dart';
 import '../features/home/screens/home_screen.dart';
 import '../features/bus_lines/screens/bus_lines_screen.dart';
 
+import '../features/favorites/bindings/favorite_places_binding.dart';
+import '../features/favorites/screens/favorites_screen.dart';
 
 import 'app_routes.dart';
 
@@ -44,12 +46,17 @@ class AppPages {
       page: () => const BusLinesScreen(),
       binding: BusLinesBinding(),
     ),
+    GetPage(
+      name: AppRoutes.favorites,
+      page: () => const FavoritePlacesScreen(),
+      binding: FavoritePlacesBinding(),
+    ),
     // app_pages.dart
     GetPage(
       name: AppRoutes.driverHome,
       page: () => DriverHomeScreen(),
       binding: DriverHomeBinding(),
-      ),
+    ),
     GetPage(
       name: AppRoutes.driverTrip,
       page: () => DriverTripScreen(),
@@ -77,10 +84,6 @@ class AppPages {
     // GetPage(
     //   name: AppRoutes.predictions,
     //   page: () => const PredictionsScreen(),
-    // ),
-    // GetPage(
-    //   name: AppRoutes.favorites,
-    //   page: () => const FavoritesScreen(),
     // ),
     // GetPage(
     //   name: AppRoutes.notifications,

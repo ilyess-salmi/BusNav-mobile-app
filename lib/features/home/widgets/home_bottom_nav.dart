@@ -45,6 +45,7 @@ class HomeBottomNav extends StatelessWidget {
             icon: Icons.favorite_border,
             label: 'Favorites',
             active: activeIndex == 2,
+            onTap: () => Get.toNamed(AppRoutes.favorites),
           ),
           HomeNavItem(
             icon: Icons.notifications_none,
