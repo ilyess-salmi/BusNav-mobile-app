@@ -191,6 +191,18 @@ class FavoritePlacesScreen extends StatelessWidget {
     );
   }
 
+  void _openMapView(BuildContext context, FavoritePlaceModel place) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PickLocationScreen(
+          initialLatitude: place.latitude,
+          initialLongitude: place.longitude,
+          readOnly: true,
+        ),
+      ),
+    );
+  }
+
   void _confirmDelete(BuildContext context, FavoritePlaceModel place) {
     final controller = Get.find<FavoritePlacesController>();
 
@@ -307,6 +319,7 @@ class FavoritePlacesScreen extends StatelessWidget {
                           name: place.favoriteName,
                           latitude: place.latitude,
                           longitude: place.longitude,
+                          onTap: () => _openMapView(context, place),
                           onEdit: () => _openEditDialog(context, place),
                           onDelete: () => _confirmDelete(context, place),
                         );

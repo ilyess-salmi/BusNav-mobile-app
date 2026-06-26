@@ -4,8 +4,8 @@ import '../models/favorite_model.dart';
 class FavoritePlacesRepository {
   final ApiClient _apiClient = ApiClient();
 
-  Future<List<FavoritePlaceModel>> getFavoritePlaces() async {
-    final response = await _apiClient.get('/favorite-places');
+  Future<List<FavoritePlaceModel>> getFavoritePlaces(int userId) async {
+    final response = await _apiClient.get('/favorite-places?user_id=$userId');
 
     return (response.data as List)
         .map((json) => FavoritePlaceModel.fromJson(json))

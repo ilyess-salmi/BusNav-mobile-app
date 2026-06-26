@@ -4,11 +4,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class PickLocationScreen extends StatefulWidget {
   final double? initialLatitude;
   final double? initialLongitude;
+  final bool readOnly;
 
   const PickLocationScreen({
     super.key,
     this.initialLatitude,
     this.initialLongitude,
+    this.readOnly = false,
   });
 
   @override
@@ -30,6 +32,7 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
   }
 
   void _onMapTap(LatLng position) {
+    if (widget.readOnly) return;
     setState(() {
       _pickedLocation = position;
     });
@@ -51,7 +54,7 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick a Location'),
+        title: Text(widget.readOnly ? 'Place Location' : 'Pick a Location'),
         backgroundColor: const Color(0xFFB247FF),
         foregroundColor: Colors.white,
       ),
@@ -62,7 +65,7 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
               target: initialCenter,
               zoom: 14,
             ),
-            onTap: _onMapTap,
+            onTap: widget.readOnly ? null : _onMapTap,
             markers: _pickedLocation != null
                 ? {
                     Marker(
@@ -98,35 +101,38 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
                   ),
                 ],
               ),
-              child: const Text(
-                'Tap anywhere on the map to drop a pin',
-                style: TextStyle(fontSize: 13, color: Colors.black87),
+              child: Text(
+                widget.readOnly
+                    ? 'This is the saved location for this place'
+                    : 'Tap anywhere on the map to drop a pin',
+                style: const TextStyle(fontSize: 13, color: Colors.black87),
               ),
             ),
           ),
-          Positioned(
-            bottom: 24,
-            left: 16,
-            right: 16,
-            child: ElevatedButton(
-              onPressed: _confirm,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFB247FF),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+          if (!widget.readOnly)
+            Positioned(
+              bottom: 24,
+              left: 16,
+              right: 16,
+              child: ElevatedButton(
+                onPressed: _confirm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFB247FF),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
-              ),
-              child: const Text(
-                'Confirm Location',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                child: const Text(
+                  'Confirm Location',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ class FavoritePlaceCard extends StatelessWidget {
   final double longitude;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback? onTap;
 
   const FavoritePlaceCard({
     super.key,
@@ -14,11 +15,15 @@ class FavoritePlaceCard extends StatelessWidget {
     required this.longitude,
     required this.onEdit,
     required this.onDelete,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -84,6 +89,7 @@ class FavoritePlaceCard extends StatelessWidget {
             onPressed: onDelete,
           ),
         ],
+      ),
       ),
     );
   }

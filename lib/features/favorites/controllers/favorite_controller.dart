@@ -23,7 +23,7 @@ class FavoritePlacesController extends GetxController {
   Future<void> fetchFavoritePlaces() async {
     try {
       isLoading.value = true;
-      favoritePlaces.value = await _repository.getFavoritePlaces();
+      favoritePlaces.value = await _repository.getFavoritePlaces(_userId);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load favorite places');
     } finally {
@@ -44,9 +44,7 @@ class FavoritePlacesController extends GetxController {
         latitude: latitude,
         longitude: longitude,
       );
-      print("-----------------------------------------");
-      print(_userId);
-      print("==========================================");
+    
       favoritePlaces.add(created);
       return true;
     } catch (e) {
